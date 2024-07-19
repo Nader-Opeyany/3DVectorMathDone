@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://chkojpi1j13wy"
+path="res://.godot/imported/Deadly Roulette_shortened.mp3-fcc837248d3e7e4e5c430e4286afd8d4.mp3str"
+
+[deps]
+
+source_file="res://Deadly Roulette_shortened.mp3"
+dest_files=["res://.godot/imported/Deadly Roulette_shortened.mp3-fcc837248d3e7e4e5c430e4286afd8d4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

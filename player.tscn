@@ -1,0 +1,110 @@
+[gd_scene load_steps=9 format=3 uid="uid://cfo1w0kg5q8v8"]
+
+[ext_resource type="PackedScene" uid="uid://crhk2fwt4wk4l" path="res://art/player.glb" id="1_kubln"]
+[ext_resource type="Script" path="res://player.gd" id="1_nd4hr"]
+[ext_resource type="AudioStream" uid="uid://chkojpi1j13wy" path="res://Deadly Roulette_shortened.mp3" id="3_uffbo"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_yo338"]
+radius = 0.837158
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dol8j"]
+height = 0.402175
+radius = 0.866251
+
+[sub_resource type="Animation" id="Animation_kg8d4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/character:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -1.19209e-07, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/character:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_w2h5m"]
+resource_name = "float"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/character:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.3, 0.7, 1.2),
+"transitions": PackedFloat32Array(0.420448, 2.07053, 1),
+"update": 0,
+"values": [Vector3(0, -1.19209e-07, 0), Vector3(0, 0.65, 0), Vector3(0, 0.2, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/character:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.5, 1.2),
+"transitions": PackedFloat32Array(0.420448, 2.07053, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.139626, 0, 0), Vector3(-0.132645, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lmcej"]
+_data = {
+"RESET": SubResource("Animation_kg8d4"),
+"float": SubResource("Animation_w2h5m")
+}
+
+[node name="Player" type="CharacterBody3D"]
+collision_mask = 6
+script = ExtResource("1_nd4hr")
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="character" parent="Pivot" instance=ExtResource("1_kubln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.19209e-07, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.588642, 0)
+shape = SubResource("SphereShape3D_yo338")
+
+[node name="MobDetector" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.173805, 0)
+visible = false
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MobDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57598, 0)
+shape = SubResource("CylinderShape3D_dol8j")
+
+[node name="dead" type="AudioStreamPlayer3D" parent="."]
+visible = false
+stream = ExtResource("3_uffbo")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lmcej")
+}
+autoplay = "float"
+
+[connection signal="body_entered" from="MobDetector" to="." method="_on_mob_detector_body_entered"]
